@@ -9,6 +9,17 @@
 </template>
 
 <style lang="scss">
+  html,
+  body {
+    margin: 0;
+
+    *,
+    ::before,
+    ::after {
+      box-sizing: border-box;
+    }
+  }
+
   [v-cloak] {
     display: none;
   }
