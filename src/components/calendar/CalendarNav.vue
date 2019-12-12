@@ -24,6 +24,11 @@ export default {
       default: () => {},
       required: true,
     },
+    calendar: {
+      type: Object,
+      default: () => {},
+      required: true,
+    },
   },
   data() {
     return {
@@ -45,7 +50,9 @@ export default {
   },
   computed: {
     thisYearAndMonthDisplay() {
-      return `${this.monthEN[this.today.month].slice(0, 3)} ${this.today.year}`;
+      return `${this.monthEN[this.calendar.month].slice(0, 3)} ${
+        this.calendar.year
+      }`;
     },
   },
   methods: {},

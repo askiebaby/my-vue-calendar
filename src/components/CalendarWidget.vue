@@ -1,7 +1,8 @@
 <template>
   <section class="calendar">
-    <CalendarNav :today="today" @update:adjustMonth="adjustMonth($event)" />
-    <CalendarBody />
+    <button @click="setToday">顯示今日</button>
+    <CalendarNav :today="today" :calendar="calendar" @update:adjustMonth="adjustMonth($event)" />
+    <CalendarBody :today="today" :calendar="calendar" />
   </section>
 </template>
 
@@ -20,6 +21,12 @@ export default {
         date: 25,
         day: 3,
       },
+      calendar: {
+        year: 2019,
+        month: 11,
+        date: 25,
+        day: 3,
+      },
     };
   },
   computed: {},
@@ -32,10 +39,10 @@ export default {
      */
     setToday() {
       const todayDate = new Date();
-      this.today.year = todayDate.getFullYear();
-      this.today.month = todayDate.getMonth();
-      this.today.date = todayDate.getDate();
-      this.today.day = todayDate.getDay();
+      this.today.year = this.calendar.year = todayDate.getFullYear();
+      this.today.month = this.calendar.month = todayDate.getMonth();
+      this.today.date = this.calendar.date = todayDate.getDate();
+      this.today.day = this.calendar.day = todayDate.getDay();
     },
 
     /**
@@ -43,7 +50,7 @@ export default {
      * @param yearNum 上一年、下一年
      */
     adjustYear(yearNum) {
-      this.today.year += yearNum;
+      this.calendar.year += yearNum;
     },
 
     /**
@@ -51,19 +58,19 @@ export default {
      * @param monthNum 上個月、下個月
      */
     adjustMonth({ monthNum }) {
-      const monthResult = (this.today.month += monthNum);
+      const monthResult = (this.calendar.month += monthNum);
 
       if (monthResult > 11) {
         // 大於 12 月時
-        this.today.month = 0;
+        this.calendar.month = 0;
         this.adjustYear(1);
       } else if (monthResult < 0) {
         // 小於 1 月時
-        this.today.month = 11;
+        this.calendar.month = 11;
         this.adjustYear(-1);
       } else {
         // 合理範圍內
-        this.today.month = monthResult;
+        this.calendar.month = monthResult;
       }
     },
   },
