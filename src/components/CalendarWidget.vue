@@ -11,18 +11,30 @@ import CalendarBody from '@/components/calendar/CalendarBody';
 
 export default {
   name: 'CalendarWidget',
-  props: {
-    today: {
-      type: Object,
-      default: () => {},
-      required: true,
-    },
-  },
+  props: {},
   data() {
-    return {};
+    return {
+      today: {
+        year: 2019,
+        month: 11,
+        date: 25,
+        day: 3,
+      },
+    };
   },
   computed: {},
-  methods: {},
+  mounted() {
+    this.setToday();
+  },
+  methods: {
+    setToday() {
+      const todayDate = new Date();
+      this.today.year = todayDate.getFullYear();
+      this.today.month = todayDate.getMonth();
+      this.today.date = todayDate.getDate();
+      this.today.day = todayDate.getDay();
+    },
+  },
   components: {
     CalendarNav,
     CalendarBody,
