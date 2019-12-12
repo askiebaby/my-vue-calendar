@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0d7f86"],{"78a0":function(n,e,t){"use strict";t.r(e);var a=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("section",[t("CalendarWidget")],1)},c=[],d=t("f0fd"),o={name:"TheCalendar",data:function(){return{}},computed:{},created:function(){},mounted:function(){},methods:{},components:{CalendarWidget:d["a"]}},u=o,r=t("2877"),f=Object(r["a"])(u,a,c,!1,null,"0afcfd98",null);e["default"]=f.exports}}]);
+//# sourceMappingURL=chunk-2d0d7f86.c39ed040.js.map
