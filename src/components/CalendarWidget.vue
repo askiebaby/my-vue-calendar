@@ -16,6 +16,7 @@
       :selectedDate="selectedDate"
       @update:onSelect="onSelect($event)"
       @update:setCalendarMonth="setCalendarMonth($event)"
+      @update:setCalendarYear="setCalendarYear($event)"
     />
   </section>
 </template>
@@ -155,6 +156,14 @@ export default {
     setCalendarMonth(monthIndex) {
       this.calendar.month = monthIndex;
       this.mode = 'day';
+    },
+    /**
+     * 設定年份
+     * @param year 經子層傳上來的年份
+     */
+    setCalendarYear(year) {
+      this.calendar.year = year;
+      this.mode = 'month';
     },
   },
   components: {

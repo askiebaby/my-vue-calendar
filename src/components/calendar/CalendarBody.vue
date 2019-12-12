@@ -43,7 +43,24 @@
         <button v-html="month.slice(0, 3)" @click="$emit('update:setCalendarMonth', monthIndex)" />
       </span>
     </section>
-    <section v-if="mode === 'year'">year</section>
+
+    <!-- 年份檢視 -->
+    <section class="calendar__years" v-if="mode === 'year'">
+      <span
+        v-for="(year, yearIndex) in 12"
+        :key="yearIndex"
+        :class="[
+          'calendar__year',
+        {
+          'calendar__year--selected': checkIsThisYear(yearIndex)
+        }]"
+      >
+        <button
+          v-html="year - 11 + calendar.year"
+          @click="$emit('update:setCalendarYear', year - 11 + calendar.year)"
+        />
+      </span>
+    </section>
   </section>
 </template>
 
@@ -152,8 +169,8 @@ export default {
       );
     },
     // 確認年份相同
-    checkIsThisYear(date) {
-      return;
+    checkIsThisYear(yearIndex) {
+      return yearIndex - 10 + this.calendar.year === this.selectedDate.year;
     },
     // 確認已選的日期
     checkIsSelected(date) {
@@ -234,15 +251,17 @@ export default {
       color: #db3d44;
     }
 
-    // 月份模式
-    &__months {
+    // 月份、年份模式
+    &__months,
+    &__years {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       align-content: center;
     }
 
-    &__month {
+    &__month,
+    &__year {
       width: 25%;
 
       > button {
@@ -254,7 +273,8 @@ export default {
     }
 
     .calendar__day--selected,
-    .calendar__month--selected > button {
+    .calendar__month--selected > button,
+    .calendar__year--selected > button {
       // 選中日期後覆蓋的樣式
       background-color: #db3d44;
       color: #ffffff;
