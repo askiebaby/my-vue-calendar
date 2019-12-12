@@ -22,8 +22,9 @@
         {
           'calendar__today': checkIsToday(getDayIndex(week, day)),
           'calendar__this-month': checkDayIsInMonth(getDayIndex(week, day)),
-          'calendar__day--selected':checkIsToday(getDayIndex(week, day)),
+          'calendar__day--selected': checkIsSelected(getDayIndex(week, day)),
         }]"
+        @click="$emit('update:onSelect', { date: getDayIndex(week, day), isInMonth: checkDayIsInMonth(getDayIndex(week, day))} )"
       >{{getDayIndex(week, day).getDate()}}</button>
     </div>
   </section>
@@ -42,6 +43,11 @@ export default {
       type: Object,
       default: () => {},
       required: true,
+    },
+    selectedDate: {
+      type: Object,
+      default: () => {},
+      required: false,
     },
   },
   data() {
@@ -121,6 +127,14 @@ export default {
     },
     checkIsThisYear(date) {
       return date.getFullYear() === this.calendar.year;
+    },
+
+    checkIsSelected(date) {
+      return (
+        date.getFullYear() === this.selectedDate.year &&
+        date.getMonth() === this.selectedDate.month &&
+        date.getDate() === this.selectedDate.date
+      );
     },
   },
   components: {},
