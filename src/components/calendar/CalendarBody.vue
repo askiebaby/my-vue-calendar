@@ -1,37 +1,55 @@
 <template>
   <!-- An Whole month -->
   <section class="calendar__body">
-    <!-- weekdays -->
-    <div class="calendar__weekdays">
-      <div
-        class="calendar__weekday"
-        v-for="(weekday, weekdayIndex) in weekdays.en"
-        :key="weekdayIndex"
-        v-html="weekday.slice(0, 2)"
-      />
-    </div>
+    <section v-if="mode === 'day'">
+      <!-- weekdays -->
+      <div class="calendar__weekdays">
+        <div
+          class="calendar__weekday"
+          v-for="(weekday, weekdayIndex) in weekdays.en"
+          :key="weekdayIndex"
+          v-html="weekday.slice(0, 2)"
+        />
+      </div>
 
-    <!-- days -->
-    <div class="calendar__week" v-for="(week, weekIndex) in 6" :key="weekIndex">
-      <button
-        v-for="(day, dayIndex) in 7"
-        :key="dayIndex"
-        :data-date="getEachDate(week, day)"
-        :class="[
+      <!-- days -->
+      <div class="calendar__week" v-for="(week, weekIndex) in 6" :key="weekIndex">
+        <button
+          v-for="(day, dayIndex) in 7"
+          :key="dayIndex"
+          :data-date="getEachDate(week, day)"
+          :class="[
           'calendar__day',
         {
           'calendar__today': checkIsToday(getEachDate(week, day)),
           'calendar__this-month': checkDayIsInMonth(getEachDate(week, day)),
           'calendar__day--selected': checkIsSelected(getEachDate(week, day)),
         }]"
-        @click="onSelect(week, day)"
-        v-html="getEachDate(week, day).getDate()"
-      />
-    </div>
+          @click="onSelect(week, day)"
+          v-html="getEachDate(week, day).getDate()"
+        />
+      </div>
+    </section>
+    <section class="calendar__months" v-if="mode === 'month'">
+      <span
+        v-for="(month, monthIndex) in months.en"
+        :key="monthIndex"
+        :class="[
+          'calendar__month',
+        {
+          'calendar__month--selected': checkIsThisMonth(monthIndex)
+        }]"
+      >
+        <button v-html="month.slice(0, 3)" @click="$emit('update:setCalendarMonth', monthIndex)" />
+      </span>
+    </section>
+    <section v-if="mode === 'year'">year</section>
   </section>
 </template>
 
 <script>
+import { calendar } from '@/config/calendar';
+
 export default {
   name: 'CalendarBody',
   props: {
@@ -50,23 +68,21 @@ export default {
       default: () => {},
       required: false,
     },
+    mode: {
+      type: String,
+      default: 'day',
+    },
   },
   data() {
-    return {
-      weekdays: {
-        en: [
-          'Sunday',
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday',
-        ],
-      },
-    };
+    return {};
   },
   computed: {
+    weekdays() {
+      return calendar.weekdays;
+    },
+    months() {
+      return calendar.months;
+    },
     // 一個月的第一天是星期幾，day 起始是 0 星期日
     monthFirstDay() {
       return new Date(this.calendar.year, this.calendar.month, 1).getDay();
@@ -123,15 +139,21 @@ export default {
     },
     // 確認是否為當月的日期
     checkDayIsInMonth(date) {
-      return this.checkIsThisYear(date) && this.checkIsThisMonth(date);
+      return (
+        date.getMonth() === this.calendar.month &&
+        date.getFullYear() === this.calendar.year
+      );
     },
     // 確認月份相同
-    checkIsThisMonth(date) {
-      return date.getMonth() === this.calendar.month;
+    checkIsThisMonth(monthIndex) {
+      return (
+        monthIndex === this.selectedDate.month &&
+        this.calendar.year === this.selectedDate.year
+      );
     },
     // 確認年份相同
     checkIsThisYear(date) {
-      return date.getFullYear() === this.calendar.year;
+      return;
     },
     // 確認已選的日期
     checkIsSelected(date) {
@@ -212,7 +234,27 @@ export default {
       color: #db3d44;
     }
 
-    .calendar__day--selected {
+    // 月份模式
+    &__months {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: center;
+    }
+
+    &__month {
+      width: 25%;
+
+      > button {
+        width: 50px;
+        height: 50px;
+        border: 0;
+        border-radius: 50%;
+      }
+    }
+
+    .calendar__day--selected,
+    .calendar__month--selected > button {
       // 選中日期後覆蓋的樣式
       background-color: #db3d44;
       color: #ffffff;

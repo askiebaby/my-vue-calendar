@@ -2,20 +2,26 @@
   <nav class="calendar__nav">
     <!-- 控制區塊：上一月 -->
     <div class="calendar__nav__month-controller">
-      <button class="calendar__nav__prev" @click="$emit('update:adjustMonth', { monthNum: -1 })"></button>
+      <button class="calendar__nav__prev" @click="prevTime"></button>
     </div>
 
     <!-- 顯示目前年月，或是選擇後的年月 -->
-    <button class="calendar__nav__month-year" v-html="thisYearAndMonthDisplay" />
+    <button
+      class="calendar__nav__month-year"
+      v-html="thisYearAndMonthDisplay"
+      @click="$emit('update:onChangeMode', mode)"
+    />
 
     <!-- 控制區塊：下一月 -->
     <div class="calendar__nav__month-controller">
-      <button class="calendar__nav__next" @click="$emit('update:adjustMonth', { monthNum: 1 })"></button>
+      <button class="calendar__nav__next" @click="nextTime"></button>
     </div>
   </nav>
 </template>
 
 <script>
+import { calendar } from '@/config/calendar';
+
 export default {
   name: 'CalendarNav',
   props: {
@@ -29,33 +35,75 @@ export default {
       default: () => {},
       required: true,
     },
-  },
-  data() {
-    return {
-      monthEN: [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-      ],
-    };
-  },
-  computed: {
-    thisYearAndMonthDisplay() {
-      return `${this.monthEN[this.calendar.month].slice(0, 3)} ${
-        this.calendar.year
-      }`;
+    mode: {
+      type: String,
+      default: 'day',
     },
   },
-  methods: {},
+  data() {
+    return {};
+  },
+  computed: {
+    weekdays() {
+      return calendar.weekdays;
+    },
+    months() {
+      return calendar.months;
+    },
+    thisYearAndMonthDisplay() {
+      let display;
+      switch (this.mode) {
+      case 'day':
+        display = `${this.months.en[this.calendar.month].slice(0, 3)} ${
+          this.calendar.year
+        }`;
+        break;
+
+      case 'month':
+        display = this.calendar.year;
+        break;
+
+      case 'year':
+        display = `${this.calendar.year - 9} - ${this.calendar.year}`;
+        break;
+      }
+
+      return display;
+    },
+  },
+  methods: {
+    prevTime() {
+      switch (this.mode) {
+      case 'day':
+        this.$emit('update:adjustMonth', { monthNum: -1 });
+        break;
+
+      case 'month':
+        this.$emit('update:adjustYear', { yearNum: -1 });
+        break;
+
+      case 'year':
+        this.$emit('update:adjustYear', { yearNum: -10 });
+        break;
+      }
+    },
+
+    nextTime() {
+      switch (this.mode) {
+      case 'day':
+        this.$emit('update:adjustMonth', { monthNum: 1 });
+        break;
+
+      case 'month':
+        this.$emit('update:adjustYear', { yearNum: 1 });
+        break;
+
+      case 'year':
+        this.$emit('update:adjustYear', { yearNum: 10 });
+        break;
+      }
+    },
+  },
   components: {},
 };
 </script>

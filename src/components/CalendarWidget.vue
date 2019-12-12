@@ -1,12 +1,21 @@
 <template>
   <section class="calendar">
     <button class="show-today-button" @click="setToday">顯示今日</button>
-    <CalendarNav :today="newDate" :calendar="calendar" @update:adjustMonth="adjustMonth($event)" />
+    <CalendarNav
+      :today="newDate"
+      :calendar="calendar"
+      :mode="mode"
+      @update:adjustMonth="adjustMonth($event)"
+      @update:adjustYear="adjustYear($event)"
+      @update:onChangeMode="onChangeMode($event)"
+    />
     <CalendarBody
       :today="newDate"
       :calendar="calendar"
+      :mode="mode"
       :selectedDate="selectedDate"
       @update:onSelect="onSelect($event)"
+      @update:setCalendarMonth="setCalendarMonth($event)"
     />
   </section>
 </template>
@@ -40,6 +49,7 @@ export default {
         day: 3,
       },
       selectedDate: {},
+      mode: 'day',
     };
   },
   computed: {
@@ -68,13 +78,15 @@ export default {
       this.newDate.date = this.calendar.date = todayDate.getDate();
       this.newDate.day = this.calendar.day = todayDate.getDay();
       this.selectedDate = this.newDate;
+      this.mode = 'day';
     },
 
     /**
      * 切換西元年
      * @param yearNum 上一年、下一年
      */
-    adjustYear(yearNum) {
+    adjustYear({ yearNum }) {
+      console.log(this.calendar.year, yearNum);
       this.calendar.year += yearNum;
     },
 
@@ -88,11 +100,14 @@ export default {
       if (monthResult > 11) {
         // 大於 12 月時
         this.calendar.month = 0;
-        this.adjustYear(1);
+        this.adjustYear({ yearNum: 1 });
+
+        console.log('+++', monthResult, this.calendar.month, monthNum);
       } else if (monthResult < 0) {
         // 小於 1 月時
         this.calendar.month = 11;
-        this.adjustYear(-1);
+        this.adjustYear({ yearNum: -1 });
+        console.log('---', monthResult, this.calendar.month, monthNum);
       } else {
         // 合理範圍內
         this.calendar.month = monthResult;
@@ -117,6 +132,30 @@ export default {
 
       this.selectedDate = selectedDate;
     },
+
+    /**
+     * 切換檢視模式
+     * @param mode 日 day、月 month、年 year 三種模式
+     */
+    onChangeMode(mode) {
+      switch (this.mode) {
+      case 'day':
+        this.mode = 'month';
+        break;
+
+      case 'month':
+        this.mode = 'year';
+        break;
+
+      default:
+        break;
+      }
+    },
+
+    setCalendarMonth(monthIndex) {
+      this.calendar.month = monthIndex;
+      this.mode = 'day';
+    },
   },
   components: {
     CalendarNav,
@@ -130,9 +169,9 @@ export default {
     position: relative;
     width: 300px;
     margin: auto;
-    border: 1px solid #efefef;
+    border: 1px solid #cccccc;
     padding: 35px 10px;
-    border-radius: 5px;
+    border-radius: 3px;
     text-align: center;
     background-color: #ffffff;
 
