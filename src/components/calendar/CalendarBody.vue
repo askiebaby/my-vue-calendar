@@ -16,16 +16,17 @@
       <button
         v-for="(day, dayIndex) in 7"
         :key="dayIndex"
-        :data-date="getDayIndex(week, day)"
+        :data-date="getEachDate(week, day)"
         :class="[
           'calendar__day',
         {
-          'calendar__today': checkIsToday(getDayIndex(week, day)),
-          'calendar__this-month': checkDayIsInMonth(getDayIndex(week, day)),
-          'calendar__day--selected': checkIsSelected(getDayIndex(week, day)),
+          'calendar__today': checkIsToday(getEachDate(week, day)),
+          'calendar__this-month': checkDayIsInMonth(getEachDate(week, day)),
+          'calendar__day--selected': checkIsSelected(getEachDate(week, day)),
         }]"
-        @click="$emit('update:onSelect', { date: getDayIndex(week, day), isInMonth: checkDayIsInMonth(getDayIndex(week, day))} )"
-      >{{getDayIndex(week, day).getDate()}}</button>
+        @click="onSelect(week, day)"
+        v-html="getEachDate(week, day).getDate()"
+      />
     </div>
   </section>
 </template>
@@ -105,10 +106,13 @@ export default {
   },
   methods: {
     // 取得該日期的 date 物件
-    getDayIndex(week, day) {
-      return this.calendarDays[(week - 1) * 7 + (day - 1)];
+    getEachDate(week, day) {
+      return this.calendarDays[this.getDayIndex(week, day)];
     },
-
+    // 取得每個日期在日曆中排第幾個
+    getDayIndex(week, day) {
+      return (week - 1) * 7 + (day - 1);
+    },
     // 確認是否為當日的日期
     checkIsToday(date) {
       return (
@@ -117,24 +121,34 @@ export default {
         date.getDate() === this.today.date
       );
     },
-
     // 確認是否為當月的日期
     checkDayIsInMonth(date) {
       return this.checkIsThisYear(date) && this.checkIsThisMonth(date);
     },
+    // 確認月份相同
     checkIsThisMonth(date) {
       return date.getMonth() === this.calendar.month;
     },
+    // 確認年份相同
     checkIsThisYear(date) {
       return date.getFullYear() === this.calendar.year;
     },
-
+    // 確認已選的日期
     checkIsSelected(date) {
       return (
         date.getFullYear() === this.selectedDate.year &&
         date.getMonth() === this.selectedDate.month &&
         date.getDate() === this.selectedDate.date
       );
+    },
+    /*
+     * 選擇日期
+     */
+    onSelect(week, day) {
+      this.$emit('update:onSelect', {
+        date: this.getEachDate(week, day),
+        isInMonth: this.checkDayIsInMonth(this.getEachDate(week, day)),
+      });
     },
   },
   components: {},
