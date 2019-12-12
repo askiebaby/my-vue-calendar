@@ -1,6 +1,6 @@
 <template>
   <section>
-    <CalendarWidget date="2019-12-01" />
+    <CalendarWidget />
   </section>
 </template>
 

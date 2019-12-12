@@ -82,6 +82,11 @@ export default {
 
       this.selectedDate = this.calendar;
       this.mode = 'day';
+
+      this.$emit('onSelect', {
+        selectedDate: this.selectedDate,
+        isShowCalendar: false,
+      });
     },
 
     /**
@@ -130,6 +135,11 @@ export default {
       }
 
       this.selectedDate = selectedDate;
+
+      this.$emit('onSelect', {
+        selectedDate: this.selectedDate,
+        isShowCalendar: false,
+      });
     },
 
     /**
@@ -178,7 +188,7 @@ export default {
 <style lang="scss" scoped>
   .calendar {
     position: relative;
-    width: 300px;
+    width: 280px;
     margin: auto;
     border: 1px solid #cccccc;
     padding: 35px 10px;
