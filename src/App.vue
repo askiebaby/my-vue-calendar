@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-cloak>
     <div id="nav">
       <router-link :to="{ name: 'calendar' }">Task 1: Calendar</router-link>
       <router-link :to="{ name: 'datePicker' }">Task 2: Date Picker</router-link>
@@ -9,6 +9,10 @@
 </template>
 
 <style lang="scss">
+  [v-cloak] {
+    display: none;
+  }
+
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
