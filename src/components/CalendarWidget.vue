@@ -1,6 +1,6 @@
 <template>
   <section class="calendar">
-    <CalendarNav :today="today" />
+    <CalendarNav :today="today" @update:adjustMonth="adjustMonth($event)" />
     <CalendarBody />
   </section>
 </template>
@@ -27,12 +27,44 @@ export default {
     this.setToday();
   },
   methods: {
+    /**
+     * 設置當前年月日
+     */
     setToday() {
       const todayDate = new Date();
       this.today.year = todayDate.getFullYear();
       this.today.month = todayDate.getMonth();
       this.today.date = todayDate.getDate();
       this.today.day = todayDate.getDay();
+    },
+
+    /**
+     * 切換西元年
+     * @param yearNum 上一年、下一年
+     */
+    adjustYear(yearNum) {
+      this.today.year += yearNum;
+    },
+
+    /**
+     * 切換月份
+     * @param monthNum 上個月、下個月
+     */
+    adjustMonth({ monthNum }) {
+      const monthResult = (this.today.month += monthNum);
+
+      if (monthResult > 11) {
+        // 大於 12 月時
+        this.today.month = 0;
+        this.adjustYear(1);
+      } else if (monthResult < 0) {
+        // 小於 1 月時
+        this.today.month = 11;
+        this.adjustYear(-1);
+      } else {
+        // 合理範圍內
+        this.today.month = monthResult;
+      }
     },
   },
   components: {

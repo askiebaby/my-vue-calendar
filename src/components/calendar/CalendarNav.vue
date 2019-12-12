@@ -2,7 +2,7 @@
   <nav class="calendar__nav">
     <!-- 控制區塊：上一月 -->
     <div class="calendar__nav__month-controller">
-      <button class="calendar__nav__prev"></button>
+      <button class="calendar__nav__prev" @click="$emit('update:adjustMonth', { monthNum: -1 })"></button>
     </div>
 
     <!-- 顯示目前年月，或是選擇後的年月 -->
@@ -10,7 +10,7 @@
 
     <!-- 控制區塊：下一月 -->
     <div class="calendar__nav__month-controller">
-      <button class="calendar__nav__next"></button>
+      <button class="calendar__nav__next" @click="$emit('update:adjustMonth', { monthNum: 1 })"></button>
     </div>
   </nav>
 </template>
