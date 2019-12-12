@@ -70,6 +70,7 @@ export default {
       font-size: 1rem;
       font-weight: 600;
       padding: 8px 0px;
+      border: 0;
       border-radius: 3px;
     }
 

@@ -42,7 +42,6 @@ export default {
     background-color: #ffffff;
 
     /deep/ button {
-      border: 0;
       cursor: pointer;
       background-color: transparent;
 
