@@ -2,7 +2,7 @@
   <section class="calendar">
     <button class="show-today-button" @click="setToday">顯示今日</button>
     <CalendarNav
-      :today="newDate"
+      :today="today"
       :calendar="calendar"
       :mode="mode"
       @update:adjustMonth="adjustMonth($event)"
@@ -10,7 +10,7 @@
       @update:onChangeMode="onChangeMode($event)"
     />
     <CalendarBody
-      :today="newDate"
+      :today="today"
       :calendar="calendar"
       :mode="mode"
       :selectedDate="selectedDate"
@@ -30,19 +30,17 @@ export default {
   props: {
     date: {
       Type: [Object, String],
-      default: () => {
-        return {
-          year: 2019,
-          month: 11,
-          date: 25,
-          day: 3,
-        };
-      },
-      required: true,
+      default: null,
     },
   },
   data() {
     return {
+      today: {
+        year: new Date().getFullYear(),
+        month: new Date().getMonth(),
+        date: new Date().getDate(),
+        day: new Date().getDay(),
+      },
       calendar: {
         year: 2019,
         month: 11,
@@ -53,32 +51,36 @@ export default {
       mode: 'day',
     };
   },
-  computed: {
-    newDate() {
-      return typeof this.date === Object
-        ? this.date
-        : {
-          year: this.date.split('-')[0],
-          month: this.date.split('-')[1],
-          date: this.date.split('-')[2],
-          day: new Date(this.date),
-        };
-    },
-  },
+  computed: {},
   mounted() {
-    this.setToday();
+    if (typeof this.date === 'string' && this.date) {
+      this.setDay(this.date);
+    } else if (!!this.date === false) {
+      this.setToday();
+    }
   },
   methods: {
+    setDay(date) {
+      this.calendar = {
+        year: Number(date.split('-')[0]),
+        month: Number(date.split('-')[1] > 11 ? 11 : date.split('-')[1]),
+        date: Number(date.split('-')[2]),
+        day: new Date(this.date).getDay(),
+      };
+
+      this.selectedDate = this.calendar;
+    },
     /**
      * 設置當前年月日
      */
     setToday() {
       const todayDate = new Date();
-      this.newDate.year = this.calendar.year = todayDate.getFullYear();
-      this.newDate.month = this.calendar.month = todayDate.getMonth();
-      this.newDate.date = this.calendar.date = todayDate.getDate();
-      this.newDate.day = this.calendar.day = todayDate.getDay();
-      this.selectedDate = this.newDate;
+      this.calendar.year = todayDate.getFullYear();
+      this.calendar.month = todayDate.getMonth();
+      this.calendar.date = todayDate.getDate();
+      this.calendar.day = todayDate.getDay();
+
+      this.selectedDate = this.calendar;
       this.mode = 'day';
     },
 
