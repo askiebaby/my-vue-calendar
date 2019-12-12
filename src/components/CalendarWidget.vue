@@ -149,6 +149,10 @@ export default {
       }
     },
 
+    /**
+     * 設定月份
+     * @param monthIndex 第幾個月
+     */
     setCalendarMonth(monthIndex) {
       this.calendar.month = monthIndex;
       this.mode = 'day';

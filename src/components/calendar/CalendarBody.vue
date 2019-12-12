@@ -30,6 +30,8 @@
         />
       </div>
     </section>
+
+    <!-- 月份檢視 -->
     <section class="calendar__months" v-if="mode === 'month'">
       <span
         v-for="(month, monthIndex) in months.en"
@@ -88,15 +90,18 @@ export default {
     mode: {
       type: String,
       default: 'day',
+      required: false,
     },
   },
   data() {
     return {};
   },
   computed: {
+    // 一週七天
     weekdays() {
       return calendar.weekdays;
     },
+    // 十二個月
     months() {
       return calendar.months;
     },
@@ -180,8 +185,10 @@ export default {
         date.getDate() === this.selectedDate.date
       );
     },
-    /*
+    /**
      * 選擇日期
+     * @param week 是週的順序，起始值是 1，最大是 6
+     * @param day 是日的順序，起始值是 1，最大是 7
      */
     onSelect(week, day) {
       this.$emit('update:onSelect', {
