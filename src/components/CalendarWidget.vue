@@ -1,11 +1,13 @@
 <template>
   <section class="calendar">
     <CalendarNav :today="today" />
+    <CalendarBody />
   </section>
 </template>
 
 <script>
 import CalendarNav from '@/components/calendar/CalendarNav';
+import CalendarBody from '@/components/calendar/CalendarBody';
 
 export default {
   name: 'CalendarWidget',
@@ -23,6 +25,7 @@ export default {
   methods: {},
   components: {
     CalendarNav,
+    CalendarBody,
   },
 };
 </script>
