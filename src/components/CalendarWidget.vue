@@ -87,7 +87,6 @@ export default {
      * @param yearNum 上一年、下一年
      */
     adjustYear({ yearNum }) {
-      console.log(this.calendar.year, yearNum);
       this.calendar.year += yearNum;
     },
 
@@ -102,13 +101,10 @@ export default {
         // 大於 12 月時
         this.calendar.month = 0;
         this.adjustYear({ yearNum: 1 });
-
-        console.log('+++', monthResult, this.calendar.month, monthNum);
       } else if (monthResult < 0) {
         // 小於 1 月時
         this.calendar.month = 11;
         this.adjustYear({ yearNum: -1 });
-        console.log('---', monthResult, this.calendar.month, monthNum);
       } else {
         // 合理範圍內
         this.calendar.month = monthResult;

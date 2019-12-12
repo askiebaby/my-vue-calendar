@@ -263,12 +263,15 @@ export default {
     &__month,
     &__year {
       width: 25%;
+      margin-bottom: 10px;
 
       > button {
         width: 50px;
         height: 50px;
         border: 0;
         border-radius: 50%;
+        font-weight: 600;
+        font-size: 0.875rem;
       }
     }
 
