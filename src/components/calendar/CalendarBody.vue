@@ -8,8 +8,9 @@
           class="calendar__weekday"
           v-for="(weekday, weekdayIndex) in weekdays.en"
           :key="weekdayIndex"
-          v-html="weekday.slice(0, 2)"
-        />
+        >
+          {{ weekday.slice(0, 2) }}
+        </div>
       </div>
 
       <!-- days -->
@@ -19,15 +20,17 @@
           :key="dayIndex"
           :data-date="getEachDate(week, day)"
           :class="[
-          'calendar__day',
-        {
-          'calendar__today': checkIsToday(getEachDate(week, day)),
-          'calendar__this-month': checkDayIsInMonth(getEachDate(week, day)),
-          'calendar__day--selected': checkIsSelected(getEachDate(week, day)),
-        }]"
+            'calendar__day',
+            {
+              calendar__today: checkIsToday(getEachDate(week, day)),
+              'calendar__this-month': checkDayIsInMonth(getEachDate(week, day)),
+              'calendar__day--selected': checkIsSelected(getEachDate(week, day)),
+            },
+          ]"
           @click="onSelect(week, day)"
-          v-html="getEachDate(week, day).getDate()"
-        />
+        >
+          {{ getEachDate(week, day).getDate() }}
+        </button>
       </div>
     </section>
 
@@ -38,11 +41,14 @@
         :key="monthIndex"
         :class="[
           'calendar__month',
-        {
-          'calendar__month--selected': checkIsThisMonth(monthIndex)
-        }]"
+          {
+            'calendar__month--selected': checkIsThisMonth(monthIndex),
+          },
+        ]"
       >
-        <button v-html="month.slice(0, 3)" @click="$emit('update:setCalendarMonth', monthIndex)" />
+        <button @click="$emit('update:setCalendarMonth', monthIndex)">
+          {{ month.slice(0, 3) }}
+        </button>
       </span>
     </section>
 
@@ -53,14 +59,14 @@
         :key="yearIndex"
         :class="[
           'calendar__year',
-        {
-          'calendar__year--selected': checkIsThisYear(yearIndex)
-        }]"
+          {
+            'calendar__year--selected': checkIsThisYear(yearIndex),
+          },
+        ]"
       >
-        <button
-          v-html="year - 11 + calendar.year"
-          @click="$emit('update:setCalendarYear', year - 11 + calendar.year)"
-        />
+        <button @click="$emit('update:setCalendarYear', year - 11 + calendar.year)">
+          {{ year - 11 + calendar.year }}
+        </button>
       </span>
     </section>
   </section>
@@ -112,11 +118,7 @@ export default {
 
     // 推算日曆第一格
     calendarFirstDay() {
-      const date = new Date(
-        this.calendar.year,
-        this.calendar.month,
-        1 - this.monthFirstDay
-      );
+      const date = new Date(this.calendar.year, this.calendar.month, 1 - this.monthFirstDay);
       return {
         year: date.getFullYear(),
         month: date.getMonth(),
@@ -161,16 +163,12 @@ export default {
     },
     // 確認是否為當月的日期
     checkDayIsInMonth(date) {
-      return (
-        date.getMonth() === this.calendar.month &&
-        date.getFullYear() === this.calendar.year
-      );
+      return date.getMonth() === this.calendar.month && date.getFullYear() === this.calendar.year;
     },
     // 確認月份相同
     checkIsThisMonth(monthIndex) {
       return (
-        monthIndex === this.selectedDate.month &&
-        this.calendar.year === this.selectedDate.year
+        monthIndex === this.selectedDate.month && this.calendar.year === this.selectedDate.year
       );
     },
     // 確認年份相同
@@ -202,97 +200,97 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .calendar {
-    &__body {
-    }
+.calendar {
+  &__body {
+  }
 
-    &__weekdays {
-      display: flex;
-      justify-content: space-around;
-      align-content: center;
-    }
+  &__weekdays {
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+  }
 
-    &__weekday {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      width: 25px;
-      height: 25px;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
+  &__weekday {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
 
-    &__week {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-    }
+  &__week {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
 
-    &__week + &__week {
-      margin-top: 6px;
-    }
+  &__week + &__week {
+    margin-top: 6px;
+  }
 
-    &__day {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 0.875rem;
-      width: 35px;
-      height: 35px;
+  &__day {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.875rem;
+    width: 35px;
+    height: 35px;
+    border: 0;
+    border-radius: 50%;
+    padding: 0;
+    border: 0;
+
+    // 非當月日期顏色
+    color: #cccccc;
+  }
+
+  &__this-month {
+    // 當月日期基底顏色
+    color: #000000;
+  }
+
+  &__today {
+    // 日期當日顏色
+    color: #db3d44;
+  }
+
+  // 月份、年份模式
+  &__months,
+  &__years {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+  }
+
+  &__month,
+  &__year {
+    width: 25%;
+    margin-bottom: 10px;
+
+    > button {
+      width: 50px;
+      height: 50px;
       border: 0;
       border-radius: 50%;
-      padding: 0;
-      border: 0;
-
-      // 非當月日期顏色
-      color: #cccccc;
-    }
-
-    &__this-month {
-      // 當月日期基底顏色
-      color: #000000;
-    }
-
-    &__today {
-      // 日期當日顏色
-      color: #db3d44;
-    }
-
-    // 月份、年份模式
-    &__months,
-    &__years {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-content: center;
-    }
-
-    &__month,
-    &__year {
-      width: 25%;
-      margin-bottom: 10px;
-
-      > button {
-        width: 50px;
-        height: 50px;
-        border: 0;
-        border-radius: 50%;
-        font-weight: 600;
-        font-size: 0.875rem;
-      }
-    }
-
-    .calendar__day--selected,
-    .calendar__month--selected > button,
-    .calendar__year--selected > button {
-      // 選中日期後覆蓋的樣式
-      background-color: #db3d44;
-      color: #ffffff;
-
-      &:hover {
-        background-color: #db3d44;
-        color: #ffffff;
-      }
+      font-weight: 600;
+      font-size: 0.875rem;
     }
   }
+
+  .calendar__day--selected,
+  .calendar__month--selected > button,
+  .calendar__year--selected > button {
+    // 選中日期後覆蓋的樣式
+    background-color: #db3d44;
+    color: #ffffff;
+
+    &:hover {
+      background-color: #db3d44;
+      color: #ffffff;
+    }
+  }
+}
 </style>

@@ -26,9 +26,7 @@ export default {
   computed: {
     selectedDateFormat() {
       return Object.keys(this.selectedDate).length
-        ? `${this.selectedDate.year}-${this.selectedDate.month + 1}-${
-          this.selectedDate.date
-        }`
+        ? `${this.selectedDate.year}-${this.selectedDate.month + 1}-${this.selectedDate.date}`
         : '';
     },
   },
@@ -49,16 +47,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .datapicker {
-    position: relative;
+.datapicker {
+  position: relative;
 
-    &__close-layer {
-      width: 100%;
-      height: 100vh;
-      background-color: transparent;
-      position: fixed;
-      top: 0;
-      left: 0;
-    }
+  &__close-layer {
+    width: 100%;
+    height: 100vh;
+    background-color: transparent;
+    position: fixed;
+    top: 0;
+    left: 0;
   }
+}
 </style>

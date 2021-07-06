@@ -179,41 +179,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .calendar {
-    position: relative;
-    width: 280px;
-    margin: auto;
-    border: 1px solid #cccccc;
-    padding: 35px 10px;
-    border-radius: 3px;
-    text-align: center;
-    background-color: #ffffff;
+.calendar {
+  position: relative;
+  width: 280px;
+  margin: auto;
+  border: 1px solid #cccccc;
+  padding: 35px 10px;
+  border-radius: 3px;
+  text-align: center;
+  background-color: #ffffff;
 
-    /deep/ button {
-      cursor: pointer;
-      background-color: transparent;
+  /deep/ button {
+    cursor: pointer;
+    background-color: transparent;
 
-      &:hover {
-        background-color: #eeeeee;
-      }
+    &:hover {
+      background-color: #eeeeee;
+    }
 
-      &:active {
-        &::before,
-        &::after {
-          background-color: #000000;
-        }
-      }
-
-      &:focus {
-        border: 1px dashed #db3d4450;
-        outline: 0;
+    &:active {
+      &::before,
+      &::after {
+        background-color: #000000;
       }
     }
 
-    .show-today-button {
-      position: absolute;
-      right: 20px;
-      top: 10px;
+    &:focus {
+      border: 1px dashed #db3d4450;
+      outline: 0;
     }
   }
+
+  .show-today-button {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+  }
+}
 </style>
