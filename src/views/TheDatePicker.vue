@@ -32,15 +32,13 @@ export default {
         : '';
     },
   },
-  created() {},
-  mounted() {},
   methods: {
     toggleCalendar() {
       this.isShowCalendar = !this.isShowCalendar;
     },
-    onSelect({ selectedDate, isShowCalendar }) {
+    onSelect({ selectedDate }) {
       this.selectedDate = selectedDate;
-      this.isShowCalendar = isShowCalendar;
+      this.isShowCalendar = false;
     },
   },
   components: {

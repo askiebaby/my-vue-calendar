@@ -27,12 +27,12 @@ export default {
   props: {
     today: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
       required: true,
     },
     calendar: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
       required: true,
     },
     mode: {
@@ -74,33 +74,33 @@ export default {
   methods: {
     prevTime() {
       switch (this.mode) {
-      case 'day':
-        this.$emit('update:adjustMonth', { monthNum: -1 });
-        break;
+        case 'day':
+          this.$emit('update:adjustMonth', -1);
+          break;
 
-      case 'month':
-        this.$emit('update:adjustYear', { yearNum: -1 });
-        break;
+        case 'month':
+          this.$emit('update:adjustYear', -1);
+          break;
 
-      case 'year':
-        this.$emit('update:adjustYear', { yearNum: -10 });
-        break;
+        case 'year':
+          this.$emit('update:adjustYear', -10);
+          break;
       }
     },
 
     nextTime() {
       switch (this.mode) {
-      case 'day':
-        this.$emit('update:adjustMonth', { monthNum: 1 });
-        break;
+        case 'day':
+          this.$emit('update:adjustMonth', 1);
+          break;
 
-      case 'month':
-        this.$emit('update:adjustYear', { yearNum: 1 });
-        break;
+        case 'month':
+          this.$emit('update:adjustYear', 1);
+          break;
 
-      case 'year':
-        this.$emit('update:adjustYear', { yearNum: 10 });
-        break;
+        case 'year':
+          this.$emit('update:adjustYear', 10);
+          break;
       }
     },
   },

@@ -74,17 +74,17 @@ export default {
   props: {
     today: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
       required: true,
     },
     calendar: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
       required: true,
     },
     selectedDate: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
       required: false,
     },
     mode: {

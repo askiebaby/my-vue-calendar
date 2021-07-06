@@ -4,7 +4,7 @@
     <CalendarNav
       :today="today"
       :calendar="calendar"
-      :mode="mode"
+      :mode="calendar.mode"
       @update:adjustMonth="adjustMonth($event)"
       @update:adjustYear="adjustYear($event)"
       @update:onChangeMode="onChangeMode($event)"
@@ -12,7 +12,7 @@
     <CalendarBody
       :today="today"
       :calendar="calendar"
-      :mode="mode"
+      :mode="calendar.mode"
       :selectedDate="selectedDate"
       @update:onSelect="onSelect($event)"
       @update:setCalendarMonth="setCalendarMonth($event)"
@@ -29,8 +29,8 @@ export default {
   name: 'CalendarWidget',
   props: {
     date: {
-      Type: [Object, String],
-      default: null,
+      Type: String,
+      default: '',
     },
   },
   data() {
@@ -39,53 +39,54 @@ export default {
         year: new Date().getFullYear(),
         month: new Date().getMonth(),
         date: new Date().getDate(),
-        day: new Date().getDay(),
       },
       calendar: {
+        mode: 'day',
         year: 2019,
         month: 11,
-        date: 25,
-        day: 3,
       },
       selectedDate: {},
-      mode: 'day',
     };
   },
   computed: {},
   mounted() {
     if (typeof this.date === 'string' && this.date) {
       this.setDay(this.date);
-    } else if (!!this.date === false) {
+    } else {
+      // 初始化
       this.setToday();
     }
   },
   methods: {
-    setDay(date) {
-      this.calendar = {
-        year: Number(date.split('-')[0]),
-        month: Number(date.split('-')[1] > 11 ? 11 : date.split('-')[1]),
-        date: Number(date.split('-')[2]),
-        day: new Date(this.date).getDay(),
+    setDay(selectedDate) {
+      const [yyyy, mm, dd] = selectedDate.split('-');
+      const year = Number(yyyy);
+      const month = Number(mm - 1);
+      const date = Number(dd);
+
+      this.selectedDate = {
+        year,
+        month,
+        date,
       };
 
-      this.selectedDate = this.calendar;
+      this.calendar = {
+        ...this.calendar,
+        year,
+        month,
+      };
     },
     /**
      * 設置當前年月日
      */
     setToday() {
-      const todayDate = new Date();
-      this.calendar.year = todayDate.getFullYear();
-      this.calendar.month = todayDate.getMonth();
-      this.calendar.date = todayDate.getDate();
-      this.calendar.day = todayDate.getDay();
+      const date = new Date();
+      const todayDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
-      this.selectedDate = this.calendar;
-      this.mode = 'day';
-
+      this.calendar.mode = 'day';
+      this.setDay(todayDate);
       this.$emit('onSelect', {
         selectedDate: this.selectedDate,
-        isShowCalendar: false,
       });
     },
 
@@ -93,29 +94,23 @@ export default {
      * 切換西元年
      * @param yearNum 上一年、下一年
      */
-    adjustYear({ yearNum }) {
-      this.calendar.year += yearNum;
+    adjustYear(yearNum) {
+      const date = new Date(`${this.calendar.year}-${this.calendar.month + 1}`);
+
+      date.setFullYear(date.getFullYear() + yearNum);
+      this.calendar.year = date.getFullYear();
     },
 
     /**
      * 切換月份
      * @param monthNum 上個月、下個月
      */
-    adjustMonth({ monthNum }) {
-      const monthResult = (this.calendar.month += monthNum);
+    adjustMonth(monthNum) {
+      const date = new Date(`${this.calendar.year}-${this.calendar.month + 1}`);
 
-      if (monthResult > 11) {
-        // 大於 12 月時
-        this.calendar.month = 0;
-        this.adjustYear({ yearNum: 1 });
-      } else if (monthResult < 0) {
-        // 小於 1 月時
-        this.calendar.month = 11;
-        this.adjustYear({ yearNum: -1 });
-      } else {
-        // 合理範圍內
-        this.calendar.month = monthResult;
-      }
+      date.setMonth(date.getMonth() + monthNum);
+      this.calendar.month = date.getMonth();
+      this.calendar.year = date.getFullYear();
     },
 
     /**
@@ -127,7 +122,6 @@ export default {
         year: date.getFullYear(),
         month: date.getMonth(),
         date: date.getDate(),
-        day: date.getDay(),
       };
 
       if (!isInMonth) {
@@ -138,7 +132,6 @@ export default {
 
       this.$emit('onSelect', {
         selectedDate: this.selectedDate,
-        isShowCalendar: false,
       });
     },
 
@@ -147,17 +140,17 @@ export default {
      * @param mode 日 day、月 month、年 year 三種模式
      */
     onChangeMode(mode) {
-      switch (this.mode) {
-      case 'day':
-        this.mode = 'month';
-        break;
+      switch (mode) {
+        case 'day':
+          this.calendar.mode = 'month';
+          break;
 
-      case 'month':
-        this.mode = 'year';
-        break;
+        case 'month':
+          this.calendar.mode = 'year';
+          break;
 
-      default:
-        break;
+        default:
+          break;
       }
     },
 
@@ -167,7 +160,7 @@ export default {
      */
     setCalendarMonth(monthIndex) {
       this.calendar.month = monthIndex;
-      this.mode = 'day';
+      this.calendar.mode = 'day';
     },
     /**
      * 設定年份
@@ -175,7 +168,7 @@ export default {
      */
     setCalendarYear(year) {
       this.calendar.year = year;
-      this.mode = 'month';
+      this.calendar.mode = 'month';
     },
   },
   components: {
