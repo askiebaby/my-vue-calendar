@@ -14,24 +14,23 @@
       </div>
 
       <!-- days -->
-      <div class="calendar__week" v-for="(week, weekIndex) in 6" :key="weekIndex">
-        <button
-          v-for="(day, dayIndex) in 7"
-          :key="dayIndex"
-          :data-date="getEachDate(week, day)"
-          :class="[
-            'calendar__day',
-            {
-              calendar__today: checkIsToday(getEachDate(week, day)),
-              'calendar__this-month': checkDayIsInMonth(getEachDate(week, day)),
-              'calendar__day--selected': checkIsSelected(getEachDate(week, day)),
-            },
-          ]"
-          @click="onSelect(week, day)"
-        >
-          {{ getEachDate(week, day).getDate() }}
-        </button>
-      </div>
+
+      <button
+        v-for="(day, dayIndex) in 42"
+        :key="dayIndex"
+        :data-date="getEachDate(dayIndex)"
+        :class="[
+          'calendar__day',
+          {
+            calendar__today: checkIsToday(getEachDate(dayIndex)),
+            'calendar__this-month': checkDayIsInMonth(getEachDate(dayIndex)),
+            'calendar__day--selected': checkIsSelected(getEachDate(dayIndex)),
+          },
+        ]"
+        @click="onSelect(dayIndex)"
+      >
+        {{ getEachDate(dayIndex).getDate() }}
+      </button>
     </section>
 
     <!-- 月份檢視 -->
@@ -64,8 +63,8 @@
           },
         ]"
       >
-        <button @click="$emit('update:setCalendarYear', year - 11 + calendar.year)">
-          {{ year - 11 + calendar.year }}
+        <button @click="$emit('update:setCalendarYear', calendarFirstYear + yearIndex)">
+          {{ calendarFirstYear + yearIndex }}
         </button>
       </span>
     </section>
@@ -130,28 +129,27 @@ export default {
     // 計算應該是幾天
     calendarDays() {
       const monthDays = [];
-      let calendar;
 
       for (let date = 0; date < 42; date++) {
-        calendar = new Date(
+        const everyday = new Date(
           this.calendarFirstDay.year,
           this.calendarFirstDay.month,
           this.calendarFirstDay.date + date
         );
-        monthDays.push(calendar);
+        monthDays.push(everyday);
       }
 
       return monthDays;
     },
+
+    calendarFirstYear() {
+      return Math.floor(this.calendar.year / 10) * 10 - 1;
+    },
   },
   methods: {
     // 取得該日期的 date 物件
-    getEachDate(week, day) {
-      return this.calendarDays[this.getDayIndex(week, day)];
-    },
-    // 取得每個日期在日曆中排第幾個
-    getDayIndex(week, day) {
-      return (week - 1) * 7 + (day - 1);
+    getEachDate(dateIndex) {
+      return this.calendarDays[dateIndex];
     },
     // 確認是否為當日的日期
     checkIsToday(date) {
@@ -173,7 +171,7 @@ export default {
     },
     // 確認年份相同
     checkIsThisYear(yearIndex) {
-      return yearIndex - 10 + this.calendar.year === this.selectedDate.year;
+      return this.calendarFirstYear + yearIndex === this.selectedDate.year;
     },
     // 確認已選的日期
     checkIsSelected(date) {
@@ -188,10 +186,10 @@ export default {
      * @param week 是週的順序，起始值是 1，最大是 6
      * @param day 是日的順序，起始值是 1，最大是 7
      */
-    onSelect(week, day) {
+    onSelect(dayIndex) {
       this.$emit('update:onSelect', {
-        date: this.getEachDate(week, day),
-        isInMonth: this.checkDayIsInMonth(this.getEachDate(week, day)),
+        date: this.getEachDate(dayIndex),
+        isInMonth: this.checkDayIsInMonth(this.getEachDate(dayIndex)),
       });
     },
   },
@@ -220,22 +218,10 @@ export default {
     margin-bottom: 10px;
   }
 
-  &__week {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-  }
-
-  &__week + &__week {
-    margin-top: 6px;
-  }
-
   &__day {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: inline-block;
     font-size: 0.875rem;
-    width: 35px;
+    width: calc(100% / 7);
     height: 35px;
     border: 0;
     border-radius: 50%;
@@ -277,6 +263,15 @@ export default {
       border-radius: 50%;
       font-weight: 600;
       font-size: 0.875rem;
+    }
+  }
+
+  &__year {
+    &:first-child,
+    &:last-child {
+      button {
+        color: #cccccc;
+      }
     }
   }
 

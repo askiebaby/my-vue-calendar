@@ -49,22 +49,20 @@ export default {
       return calendar.months;
     },
     thisYearAndMonthDisplay() {
-      let display;
       switch (this.mode) {
         case 'day':
-          display = `${this.months.en[this.calendar.month].slice(0, 3)} ${this.calendar.year}`;
-          break;
+          return `${this.months.en[this.calendar.month].slice(0, 3)} ${this.calendar.year}`;
 
         case 'month':
-          display = this.calendar.year;
-          break;
+          return this.calendar.year;
 
         case 'year':
-          display = `${this.calendar.year - 9} - ${this.calendar.year}`;
-          break;
-      }
+          const flooredYear = Math.floor(this.calendar.year / 10) * 10;
+          return `${flooredYear} - ${flooredYear + 9}`;
 
-      return display;
+        default:
+          return '';
+      }
     },
   },
   methods: {
