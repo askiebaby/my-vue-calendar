@@ -1,7 +1,7 @@
 <template>
   <!-- An Whole month -->
   <section class="calendar__body">
-    <section v-if="mode === 'day'">
+    <section v-if="calendar.mode === 'day'">
       <!-- weekdays -->
       <div class="calendar__weekdays">
         <div
@@ -34,7 +34,7 @@
     </section>
 
     <!-- 月份檢視 -->
-    <section class="calendar__months" v-if="mode === 'month'">
+    <section class="calendar__months" v-if="calendar.mode === 'month'">
       <span
         v-for="(month, monthIndex) in months.en"
         :key="monthIndex"
@@ -52,7 +52,7 @@
     </section>
 
     <!-- 年份檢視 -->
-    <section class="calendar__years" v-if="mode === 'year'">
+    <section class="calendar__years" v-if="calendar.mode === 'year'">
       <span
         v-for="(year, yearIndex) in 12"
         :key="yearIndex"
@@ -90,11 +90,6 @@ export default {
     selectedDate: {
       type: Object,
       default: () => ({}),
-      required: false,
-    },
-    mode: {
-      type: String,
-      default: 'day',
       required: false,
     },
   },

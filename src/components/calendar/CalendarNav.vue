@@ -23,33 +23,21 @@ import { calendar } from '@/config/calendar';
 export default {
   name: 'CalendarNav',
   props: {
-    today: {
-      type: Object,
-      default: () => ({}),
-      required: true,
-    },
     calendar: {
       type: Object,
       default: () => ({}),
       required: true,
-    },
-    mode: {
-      type: String,
-      default: 'day',
     },
   },
   data() {
     return {};
   },
   computed: {
-    weekdays() {
-      return calendar.weekdays;
-    },
     months() {
       return calendar.months;
     },
     thisYearAndMonthDisplay() {
-      switch (this.mode) {
+      switch (this.calendar.mode) {
         case 'day':
           return `${this.months.en[this.calendar.month].slice(0, 3)} ${this.calendar.year}`;
 
@@ -67,7 +55,7 @@ export default {
   },
   methods: {
     prevTime() {
-      switch (this.mode) {
+      switch (this.calendar.mode) {
         case 'day':
           this.$emit('update:adjustMonth', -1);
           break;
@@ -83,7 +71,7 @@ export default {
     },
 
     nextTime() {
-      switch (this.mode) {
+      switch (this.calendar.mode) {
         case 'day':
           this.$emit('update:adjustMonth', 1);
           break;

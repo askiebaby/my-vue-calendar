@@ -2,9 +2,7 @@
   <section class="calendar">
     <button class="show-today-button" @click="setToday">顯示今日</button>
     <CalendarNav
-      :today="today"
       :calendar="calendar"
-      :mode="calendar.mode"
       @update:adjustMonth="adjustMonth($event)"
       @update:adjustYear="adjustYear($event)"
       @update:onChangeMode="onChangeMode($event)"
@@ -12,7 +10,6 @@
     <CalendarBody
       :today="today"
       :calendar="calendar"
-      :mode="calendar.mode"
       :selectedDate="selectedDate"
       @update:onSelect="onSelect($event)"
       @update:setCalendarMonth="setCalendarMonth($event)"
